@@ -13,8 +13,10 @@ class Day04Tests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Error', $this->_day04->mineCoins());
     }
 
-    function testGivenKeys() {
+    function testGiven5DKeys() {
         $this->assertEquals(609043, $this->_day04->mineCoins('abcdef'));
         $this->assertEquals(1048970, $this->_day04->mineCoins('pqrstuv'));
+        $this->assertEquals(254575, $this->_day04->mineCoins('bgvyzdsv'));
     }
+
 }
