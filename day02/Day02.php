@@ -9,8 +9,9 @@ class Day02 {
     private $_side2  = 0;
     private $_side3  = 0;
 
-    private $_boxCount = 0;
-    private $_totalPaper = 0;
+    private $_boxCount    = 0;
+    private $_totalPaper  = 0;
+    private $_totalRibbon = 0;
 
     public function getPaperAmount($boxes = NULL) { 
         $this->_clearVariables();
@@ -20,8 +21,13 @@ class Day02 {
         return $this->_totalPaper;
     }
 
+    public function getRibbonAmount() {
+        return $this->_totalRibbon;
+    }
+
     public function outputAllDimensions() {
         echo "Paper: " . $this->_totalPaper . "\n";
+        echo "Ribbon: " . $this->_totalRibbon . "\n";
         echo "Box Count: " . $this->_boxCount . "\n";
         echo "\nLast Box--\n";
         echo "Box Dimensions: " . $this->_baseDimensions . "\n";
@@ -40,6 +46,7 @@ class Day02 {
             ++$this->_boxCount;
             $this->_splitDimensions($box);
             $this->_totalPaper += $this->_getPaperAmount();
+            $this->_totalRibbon += $this->_getRibbonAmount();
         }
     }
    
@@ -52,7 +59,8 @@ class Day02 {
         $this->_side1 = 0;
         $this->_side2 = 0;
         $this->_side3 = 0;
-        $this->_totalPaper = 0;
+        $this->_totalPaper  = 0;
+        $this->_totalRibbon = 0;
     }
 
     private function _splitDimensions($box) {
@@ -81,6 +89,17 @@ class Day02 {
         return $this->_paperAmount;
     }
 
+    private function _getRibbonAmount() {
+        // Requires that _getPaperAmount() has already happened...this is hacky
+        $shortSidesTotal = array_sum($this->_sides) - max($this->_sides);
+        $wrapRibbon = 2 * $shortSidesTotal;
+
+        $bowRibbon = array_product($this->_sides);
+
+        $ribbonAmount = $wrapRibbon + $bowRibbon;
+
+        return $ribbonAmount;
+    }
 }
 
 if (isset($argv[1])) {
