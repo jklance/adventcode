@@ -4,6 +4,7 @@ class Day06 {
 
     private $_lightField = array();
     private $_instruction = NULL;
+    private $_nordicMode = false;
 
     private $_keyword = NULL;
     private $_start   = array();
@@ -17,12 +18,29 @@ class Day06 {
         }
     }
 
+    public function sendNordicInstructions($instruction = NULL) {
+        $this->_nordicMode = true;
+
+        $this->sendInstructions($instruction);
+
+        return $this->getLightCount();
+    }
+
     public function sendInstructions($instructions = NULL) {
+        $this->Day06(); // Clear the field
         $instructionSet = explode('::', $instructions);
 
         foreach ($instructionSet as $instruction) {
             $this->sendInstruction($instruction);
         }
+
+        return $this->getLightCount();
+    }
+
+    public function sendNordicInstruction($instruction = NULL) {
+        $this->_nordicMode = true;
+
+        $this->sendInstruction($instruction);
 
         return $this->getLightCount();
     }
@@ -62,6 +80,7 @@ class Day06 {
     public function displayValues() {
         echo "Instruction: " . $this->_instruction . "\n";
         echo $this->_keyword . ": " . $this->_start[0] . "," . $this->_start[1] . "--" . $this->_end[0] . "," . $this->_end[1] . "\n";
+        echo "Brightness: " . $this->getLightCount() . "\n";
     }
 
     private function _parseInstruction() {
@@ -73,17 +92,26 @@ class Day06 {
     }
 
     private function _getKeyword() {
-        if (strpos($this->_instruction, 'toggle') === 0) 
-            $this->_keyword = 'toggle';
-        elseif (strpos($this->_instruction, 'turn on') === 0)
-            $this->_keyword = 'on';
-        elseif (strpos($this->_instruction, 'turn off') === 0) 
-            $this->_keyword = 'off';
+        if (!$this->_nordicMode) {
+            if (strpos($this->_instruction, 'toggle') === 0) 
+                $this->_keyword = 'toggle';
+            elseif (strpos($this->_instruction, 'turn on') === 0)
+                $this->_keyword = 'on';
+            elseif (strpos($this->_instruction, 'turn off') === 0) 
+                $this->_keyword = 'off';
+        } else {
+            if (strpos($this->_instruction, 'toggle') === 0) 
+                $this->_keyword = 'nord_toggle';
+            elseif (strpos($this->_instruction, 'turn on') === 0)
+                $this->_keyword = 'nord_on';
+            elseif (strpos($this->_instruction, 'turn off') === 0) 
+                $this->_keyword = 'nord_off';
+        }
     }
 
     private function _getStartCoord($words) {
         $offset = 2;
-        if ($this->_keyword == 'toggle') $offset = 1;
+        if ($this->_keyword == 'toggle' || $this->_keyword == 'nord_toggle') $offset = 1;
 
         $coord = $words[$offset];
         $this->_start = explode(',', $coord);
@@ -107,6 +135,16 @@ class Day06 {
                     case "toggle":
                         $this->_lightField[$r][$c] = abs(--$this->_lightField[$r][$c]);
                         break;
+                    case "nord_on":
+                        $this->_lightField[$r][$c] += 1;
+                        break;
+                    case "nord_off":
+                        $this->_lightField[$r][$c] -= 1;
+                        if ($this->_lightField[$r][$c] < 0) $this->_lightField[$r][$c] = 0;
+                        break;
+                    case "nord_toggle":
+                        $this->_lightField[$r][$c] += 2;
+                        break;
                 }
             }
         }
@@ -119,7 +157,7 @@ class Day06 {
 
 if (isset($argv[1])) {
     $day06 = new Day06;
-    echo $day06->sendInstructions($argv[1]) . "\n";
+    $day06->sendNordicInstructions($argv[1]) . "\n";
     $day06->displayValues();
     //$day06->displayLightGrid();
 }

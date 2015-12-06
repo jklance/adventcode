@@ -33,5 +33,13 @@ class Day06Tests extends PHPUnit_Framework_TestCase {
         ));
     }
 
+    function testNordicTurnOn() {
+        $this->assertEquals(1000000, $this->_day06->sendNordicInstruction('turn on 0,0 through 999,999'));
+    }
+
+    function testBulkNordicSets() {
+        $this->assertEquals(3, $this->_day06->sendNordicInstructions('turn on 0,0 through 0,0::toggle 0,0 through 0,0'));
+        $this->assertEquals(2000, $this->_day06->sendNordicInstructions('turn on 0,0 through 999,0::toggle 0,0 through 999,0::turn off 0,0 through 999,0'));
+    }
 }
 
