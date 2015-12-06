@@ -32,5 +32,25 @@ class Day01Tests extends PHPUnit_Framework_TestCase {
         $this->assertEquals(-3, $this->_day01->travelFloors(')))'));
         $this->assertEquals(-3, $this->_day01->travelFloors(')())())'));
     }
+
+    function testBasementPosition() {
+        $this->_day01->travelFloors(')');
+        $this->assertEquals(1, $this->_day01->getBasementEntry());
+    }
+
+    function testNoBasementPosition() {
+        $this->_day01->travelFloors('(');
+        $this->assertEquals("None", $this->_day01->getBasementEntry());
+    }
+
+    function testRepeatedBasementPosition() {
+        $this->_day01->travelFloors(')((())()))');
+        $this->assertEquals(1, $this->_day01->getBasementEntry());
+    }
+
+    function testGivenPositions() {
+        $this->_day01->travelFloors('()())');
+        $this->assertEquals(5, $this->_day01->getBasementEntry());
+    }
 }
 
