@@ -5,15 +5,30 @@ class Day05 {
     private $_niceListCount = 0;
     private $_inString = NULL;
 
-    public function testStrings($inStrings = NULL) {
+    public function testStrings($inStrings = NULL, $advanced = NULL) {
         $this->_niceListCount = 0;
         $strings = explode(',', $inStrings);
 
         foreach ($strings as $string) {
-            $this->testString($string);
+            if ($advanced) 
+                $this->advancedTestString($string); 
+            else 
+                $this->testString($string);
         }
 
         return $this->_niceListCount;
+    }
+
+    public function advancedTestString($inString = NULL) {
+        $this->_inString = $inString;
+        $sort = "naughty";
+
+        if ($this->_isAdvancedNice()) {
+            $sort = "nice";
+            ++$this->_niceListCount;
+        }
+
+        return $sort;
     }
 
     public function testString($inString = NULL) {
@@ -40,6 +55,17 @@ class Day05 {
         $hasNoBadPairs = $this->_hasNoBadPairs();
 
         if ($enoughVowels && $hasDoubles && $hasNoBadPairs) $value = true;
+
+        return $value;
+    }
+
+    private function _isAdvancedNice() {
+        $value = false;
+
+        $hasDuplicatePairsNoOverlap = $this->_hasDuplicatePairsNoOverlap();
+        $hasSplitRepeat = $this->_hasSplitRepeat();
+
+        if ($hasDuplicatePairsNoOverlap && $hasSplitRepeat) $value = true;
 
         return $value;
     }
@@ -80,13 +106,38 @@ class Day05 {
         return $value;
     }
 
-        
+    private function _hasDuplicatePairsNoOverlap() {
+        $value = false;
+        $i = 1;
+
+        while ($value == false && $i < strlen($this->_inString)) {
+            $pair = substr($this->_inString, $i - 1, 2);
+            if (strpos($this->_inString, $pair, $i + 1) !== false) $value = true;
+            ++$i;
+        }
+
+        return $value;
+    }
+
+    private function _hasSplitRepeat() {
+        $value = false;
+        $i = 2;
+
+        while ($value == false && $i < strlen($this->_inString)) {
+            if ($this->_inString[$i] == $this->_inString[$i-2]) $value = true;
+            ++$i;
+        }
+
+        return $value;
+    }
         
         
 }
 
 if (isset($argv[1])) {
     $day05 = new Day05;
-    echo $day05->testStrings($argv[1]) . "\n";
+
+    if (!isset($argv[2])) $argv[2] = NULL;
+    echo $day05->testStrings($argv[1], $argv[2]) . "\n";
     echo $day05->getNiceListCount();
 }

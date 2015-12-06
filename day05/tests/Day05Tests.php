@@ -36,5 +36,28 @@ class Day05Tests extends PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $this->_day05->testStrings('ugknbfddgicrmopn,aaa,jchzalrnumimnmhp,haegwjzuvuyypxyu,dvszwmarrgswjxmb'));
     }
 
+    function testAdvancedEmptyString() {
+        $this->assertEquals("naughty", $this->_day05->advancedTestString());
+    }
+
+    function testDuplicateWithNoOverlapAndSplitRepeat() {
+        $this->assertEquals("nice", $this->_day05->advancedTestString('xyxy'));
+        $this->assertEquals("naughty", $this->_day05->advancedTestString('aabcdefgaa'));
+        $this->assertEquals("naughty", $this->_day05->advancedTestString('aaa'));
+    }
+    
+    function testAdvancedGivenStrings() {
+        $this->assertEquals("nice", $this->_day05->advancedTestString('qjhvhtzxzqqjkmpb'));
+        $this->assertEquals("nice", $this->_day05->advancedTestString('xxyxx'));
+        $this->assertEquals("naughty", $this->_day05->advancedTestString('uurcxstgmygtbstg'));
+        $this->assertEquals("naughty", $this->_day05->advancedTestString('ieodomkazucvgmuy'));
+    }
+
+    function testBulkAdvancedEntry() {
+        $this->assertEquals(2, $this->_day05->testStrings(
+            'qjhvhtzxzqqjkmpb,xxyxx,uurcxstgmygtbstg,ieodomkazucvgmuy', true)
+        );
+    }
+
 }
 
