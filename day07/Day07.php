@@ -36,6 +36,7 @@ class Day07 {
                         unset($this->_queue[$k]);
                     }
                 }
+                echo "\n a: " . $this->_wires['a'] . "\n";
             }
         }
 
@@ -69,7 +70,6 @@ class Day07 {
         $this->_recipient = trim($parts[1]);
 
         $this->_handleLeftSide($parts[0]);
-        echo $this->_operand1 . " " . $this->_operation . " " . $this->_operand2 . " -> " . $this->_recipient . "\n";
         $this->_performOperation();
     }
 
@@ -112,6 +112,9 @@ class Day07 {
                 break;
             case 'NOT':
                 $this->_performNot();
+                break;
+            case 'CLEAR':
+                $this->_performClear();
                 break;
         }
     }
@@ -164,12 +167,19 @@ class Day07 {
             $this->_wires[$this->_recipient] = (~ intval($this->_operand1)) & ((1 << 16) -1);
     }
 
+    private function _performClear() {
+        foreach ($this->_wires as $k => $v) {
+            if ($k != $this->_recipient) 
+                $this->_wires[$k] = 0;
+        }
+    }
+
 
 }
 
 if (isset($argv[1])) {
     $day07 = new Day07;
-    echo $day07->processOperations($argv[1]) . "\n";
-    $day07->displayValues();
+    $day07->processOperations($argv[1]) . "\n";
+    //$day07->displayValues();
 
 }
