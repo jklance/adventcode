@@ -29,5 +29,25 @@ class Day08Tests extends PHPUnit_Framework_TestCase {
         $this->assertEquals(6, $this->_day08->getTotalCharacters('"\x27aaa\"aaa"'));
     }
 
+
+    function testEmptyReencodeLength() {
+        $this->assertEquals(4, $this->_day08->getReencodeCharacters('""'));
+    }
+
+    function testNormalReencodeLength() {
+        $this->assertEquals(4, $this->_day08->getReencodeCharacters('""'));
+    }
+
+    function testEscapedReencodeLength() {
+        $this->assertEquals(6, $this->_day08->getReencodeCharacters('"aaa\"aaa"'));
+    }
+
+    function testEscapedHexReencodeLength() {
+        $this->assertEquals(5, $this->_day08->getReencodeCharacters('"\x27"'));
+    }
+
+    function testMultiEscapeReencodeLength() {
+        $this->assertEquals(7, $this->_day08->getReencodeCharacters('"\x27aaa\"aaa"'));
+    }
 }
 
